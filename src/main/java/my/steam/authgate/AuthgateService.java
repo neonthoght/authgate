@@ -1,10 +1,10 @@
 package my.steam.authgate;
 import my.steam.authgate.UserSMA;
+import my.steam.authgate.AuthgateRepository;
 import org.springframework.stereotype.Service; 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.data.repository.CrudRepository;
 
 @Service
 public class AuthgateService {
@@ -12,9 +12,12 @@ public class AuthgateService {
     public String password; 
     public int result = 0; // результат выполнения метода
     UserSMA user; 
+    AuthgateRepository userRepository; 
 
-
-    CrudRepository<UserSMA, String> userRepository; 
+    
+    public AuthgateService (AuthgateRepository userRepository) {
+        this.userRepository = userRepository;
+    } 
 
     public int signup(String username, String password){
         

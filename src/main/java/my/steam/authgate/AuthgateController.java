@@ -20,6 +20,8 @@ public class AuthgateController {
     int result = 0;
     ResponseEntity<String> response;
 
+    public AuthgateController(AuthgateService gateService) {this.gateService = gateService; }
+
     @PostMapping(value="/signup")
     public ResponseEntity<String> signup(@RequestBody UserSMA user) {
 
