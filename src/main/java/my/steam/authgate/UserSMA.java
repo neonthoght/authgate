@@ -7,20 +7,33 @@ import java.util.Collection;
 //import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.Table;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+
 
 @Entity
 @Table(name="users", schema = "auth")
 public class UserSMA{
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     String id; 
 
+    
     @Column(name = "username")
     String username;
 
     @Column(name = "password")
     String password; 
+
+    public UserSMA() {}
+
+    public UserSMA(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     String getId() {
         return this.id;

@@ -10,8 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class AuthgateService {
     public String username; 
     public String password; 
-    public int result = 0; // результат выполнения метода
-    UserSMA user; 
+    public int result = 0; // результат выполнения метода 
     AuthgateRepository userRepository; 
 
     
@@ -19,14 +18,19 @@ public class AuthgateService {
         this.userRepository = userRepository;
     } 
 
+
+
+    
     public int signup(String username, String password){
-        
+        UserSMA user = new UserSMA(username, password);
+
         if (userExists(username)) {
             result = 1;
         } else {
             // сохраняем в БД
-            user.username = this.username;
-            user.password = this.password;
+            //UserSMA user = new UserSMA(username, password);
+            //user.username = this.username;
+            //user.password = this.password;
             userRepository.save(user);
 
             // добавляем в контекст 
@@ -37,8 +41,7 @@ public class AuthgateService {
     }
 
     public boolean userExists(String username) {
-        userRepository.findById(username).isPresent();
-        return true;
+        return userRepository.findByUsername(username).isPresent();
     }
 
 

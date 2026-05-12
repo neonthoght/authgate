@@ -19,17 +19,19 @@ public class AuthgateController {
     AuthgateService gateService;
     int result = 0;
     ResponseEntity<String> response;
+    UserSMA user;
 
     public AuthgateController(AuthgateService gateService) {this.gateService = gateService; }
 
     @PostMapping(value="/signup")
     public ResponseEntity<String> signup(@RequestBody UserSMA user) {
-
+        System.out.println(user.username + user.password);
         result = gateService.signup(user.username, user.password);
         if (result == 0) {
-            response.status(200).body("Пользователь создан!");
+            response = ResponseEntity.status(200).body("user created!");
         } else {
-            response.status(200).body("Пользователь с таким именем уже существует!");
+            response = ResponseEntity.status(200).body("user already exists!");
+            System.out.println(response);
         }
 
         return response;
