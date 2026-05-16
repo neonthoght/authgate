@@ -3,8 +3,9 @@ import my.steam.authgate.UserSMA;
 import my.steam.authgate.AuthgateRepository;
 import org.springframework.stereotype.Service; 
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 @Service
 public class AuthgateService {
@@ -12,6 +13,7 @@ public class AuthgateService {
     public String password; 
     public int result = 0; // результат выполнения метода 
     AuthgateRepository userRepository; 
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     
     public AuthgateService (AuthgateRepository userRepository) {
@@ -20,20 +22,21 @@ public class AuthgateService {
 
 
 
-    
+    // Зарегистрироваться
+    // 0 - успешно создан, 1 - пользователь уже существует
     public int signup(String username, String password){
-        UserSMA user = new UserSMA(username, password);
-
+        
         if (userExists(username)) {
             result = 1;
         } else {
-            // сохраняем в БД
-            //UserSMA user = new UserSMA(username, password);
-            //user.username = this.username;
-            //user.password = this.password;
+ 
+            //шифруем пароль
+            password = passwordEncoder.encode(password);
+            UserSMA user = new UserSMA(username, password);
+
             userRepository.save(user);
 
-            // добавляем в контекст 
+
             result = 0;
 
         }
