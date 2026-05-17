@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import java.util.UUID;
 
 
 @Entity
@@ -36,9 +37,12 @@ public class UserSMA{ // user of steam market analisys system
 
     //используется для подтверждения email при регистрации (uuid). Испоьзовать для разных целей связанных с токеном
     @Column(name = "token")
-    String token;
+    UUID token;
 
-    public UserSMA(String username, String password, String email, String token) {
+    //default constructor. Не удалять!
+    UserSMA() {}
+
+    public UserSMA(String username, String password, String email, UUID token) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -77,16 +81,16 @@ public class UserSMA{ // user of steam market analisys system
         this.email = email;
     }
 
-        String getToken() {
+        UUID getToken() {
         return this.token;
     }
 
-    void setToken(String token) {
+    void setToken(UUID token) {
         this.token = token;
     }
 
-    String getIsActive() {
-        return this.token;
+    boolean getIsActive() {
+        return this.isActive;
     }
 
     void setIsActive(boolean isActive) {

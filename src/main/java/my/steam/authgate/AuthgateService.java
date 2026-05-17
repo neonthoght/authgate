@@ -1,7 +1,8 @@
 package my.steam.authgate;
 import my.steam.authgate.UserSMA;
 import my.steam.authgate.AuthgateRepository;
-import org.springframework.stereotype.Service; 
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,28 +11,35 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import java.util.UUID;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.MailAuthenticationException;
 
 @Service
 public class AuthgateService {
     public String username; 
     public String password; 
-    public String token;
+    public UUID token;
     public int result = 0; // результат выполнения метода 
     public AuthgateRepository userRepository; 
     public UserSMA user;
     public PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    public MailSender mailSender;
+
+    @Autowired
+    public MailSender mailSender; //= new JavaMailSenderImpl();
+
+
 
     
-    public AuthgateService (AuthgateRepository userRepository) {
+    public AuthgateService (AuthgateRepository userRepository, MailSender mailSender) {
         this.userRepository = userRepository;
+        this.mailSender = mailSender;
     } 
 
 
     // Отправить письмо для подтверждения email
-    public void sendVerificationEmail(String recipientEmail, String token) {
+    public void sendVerificationEmail(String recipientEmail, UUID token)throws MailAuthenticationException {
         
-        String confirmationUrl = "http://localhost:8081/auth/verify?token=" + token;
+        String confirmationUrl = "http://localhost:8081/auth/verify?token=" + token.toString();
         
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(recipientEmail);
@@ -45,13 +53,13 @@ public class AuthgateService {
     // в ссылке токен, который надо сравнить с токеном из БД
     // 0 - email подтвержден, зарегистрированная учетная запись (УЗ) становится активной. 
     // 1 - ошибка, токен не найден.
-    public int verifyemail(String token) {
+    public int verifyEmail(UUID token) {
         if (compareToken(token) == 0) {
             user = userRepository.findByToken(token).get();
             user.isActive = true;
-            userRepository
+            userRepository.save(user);
             result = 0;
-        } 
+        } else result = 1;
         return result;
     }
 
@@ -59,7 +67,7 @@ public class AuthgateService {
     // 0 - успешно создан, 
     // 1 - пользователь уже существует
     // 2 - email уже используется
-    public int signup(String username, String password, String email){
+    public int signup(String username, String password, String email) throws Exception {
         
         if (userExists(username)) {
             result = 1;
@@ -75,11 +83,10 @@ public class AuthgateService {
             
 
             // сохраняем пользователя в БД и отправляем письмо для подтверждения email
-            token = UUID.randomUUID().toString();
+            token = UUID.randomUUID();
             user = new UserSMA(username, password, email, token);
-            userRepository.save(user);
-
             sendVerificationEmail(email, token);
+            userRepository.save(user);
             result = 0;
 
         }
@@ -88,9 +95,9 @@ public class AuthgateService {
 
     // Токен совпадает с тем, что лежит в auth.users(token) - 0 
     // Токен не совпадает - 1
-    public int compareToken(String token) {
+    public int compareToken(UUID token) {
 
-        if (token.equals(userRepository.findByToken(token).get().token)) {
+        if (token.toString().equals(userRepository.findByToken(token).get().token.toString())) {
 
             result = 0;
         }

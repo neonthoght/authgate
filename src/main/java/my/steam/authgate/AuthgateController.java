@@ -11,6 +11,7 @@ import my.steam.authgate.UserSMA;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
+import java.util.UUID;
 
 
 @RestController
@@ -30,12 +31,16 @@ public class AuthgateController {
     }
 
     @PostMapping(value="/signup")
-    public ResponseEntity<String> signup(@RequestBody UserSMA user) {
+    public ResponseEntity<String> signup(@RequestBody UserSMA user) throws Exception {
         System.out.println(user.username + user.password);
         result = gateService.signup(user.username, user.password, user.email);
         if (result == 0) {
             response = ResponseEntity.status(200).body("user created!");
-        } else {
+        } 
+        else if (result == 2) { // email уже используется
+            response = ResponseEntity.status(200).body("email already used!");
+        } 
+        else {
             response = ResponseEntity.status(200).body("user already exists!");
             System.out.println(response);
         }
@@ -44,11 +49,8 @@ public class AuthgateController {
     }
     
     @GetMapping(value="/verifyemail")
-    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
-        if (gateService.compareToken(token) == 0) {
-            gate
-            gateRepository.save()
-        }
+    public ResponseEntity<String> verifyEmail(@RequestParam UUID token) {
+        gateService.verifyEmail(token);
         return  response;
     }
 
