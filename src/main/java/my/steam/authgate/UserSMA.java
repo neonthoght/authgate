@@ -15,7 +15,7 @@ import jakarta.persistence.Column;
 
 @Entity
 @Table(name="users", schema = "auth")
-public class UserSMA{
+public class UserSMA{ // user of steam market analisys system 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +28,22 @@ public class UserSMA{
     @Column(name = "password")
     String password; 
 
+    @Column(name = "email")
+    String email; 
+
+    @Column(name = "is_active")
+    boolean isActive;
+
+    //используется для подтверждения email при регистрации (uuid). Испоьзовать для разных целей связанных с токеном
+    @Column(name = "token");
+    String token;
+
     public UserSMA() {}
 
-    public UserSMA(String username, String password) {
+    public UserSMA(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 
     String getId() {
@@ -58,4 +69,29 @@ public class UserSMA{
     void setPassword( String password) {
         this.password = password;
     }
+
+    String getEmail() {
+        return this.email;
+    }
+
+    void setEmail(String email) {
+        this.email = email;
+    }
+
+        String getToken() {
+        return this.token;
+    }
+
+    void setToken(String token) {
+        this.token = token;
+    }
+
+    String getIsActive() {
+        return this.token;
+    }
+
+    void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
 }
