@@ -17,9 +17,10 @@ public class AuthgateService {
     public String password; 
     public String token;
     public int result = 0; // результат выполнения метода 
-    AuthgateRepository userRepository; 
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    MailSender mailSender;
+    public AuthgateRepository userRepository; 
+    public UserSMA user;
+    public PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    public MailSender mailSender;
 
     
     public AuthgateService (AuthgateRepository userRepository) {
@@ -38,6 +39,20 @@ public class AuthgateService {
         message.setText("Перейдите по ссылке для подтверждения аккаунта: " + confirmationUrl);
         
         mailSender.send(message);
+    }
+
+    // пользователь перешёл по ссылке - подтверждает почту при регистрации. 
+    // в ссылке токен, который надо сравнить с токеном из БД
+    // 0 - email подтвержден, зарегистрированная учетная запись (УЗ) становится активной. 
+    // 1 - ошибка, токен не найден.
+    public int verifyemail(String token) {
+        if (compareToken(token) == 0) {
+            user = userRepository.findByToken(token).get();
+            user.isActive = true;
+            userRepository
+            result = 0;
+        } 
+        return result;
     }
 
     // Зарегистрировать пользователя
@@ -61,7 +76,7 @@ public class AuthgateService {
 
             // сохраняем пользователя в БД и отправляем письмо для подтверждения email
             token = UUID.randomUUID().toString();
-            UserSMA user = new UserSMA(username, password, email, token);
+            user = new UserSMA(username, password, email, token);
             userRepository.save(user);
 
             sendVerificationEmail(email, token);

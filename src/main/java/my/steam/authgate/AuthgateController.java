@@ -1,5 +1,6 @@
 package my.steam.authgate;
 import my.steam.authgate.AuthgateService;
+import my.steam.authgate.AuthgateRepository;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import my.steam.authgate.UserSMA;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.ResponseEntity;
-import rg.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -18,11 +19,15 @@ import rg.springframework.web.bind.annotation.RequestParam;
 public class AuthgateController {
 
     AuthgateService gateService;
+    AuthgateRepository gateRepository;
     int result = 0;
     ResponseEntity<String> response;
     UserSMA user;
 
-    public AuthgateController(AuthgateService gateService) {this.gateService = gateService; }
+    public AuthgateController(AuthgateService gateService, AuthgateRepository gateRepository) {
+        this.gateService = gateService; 
+        this.gateRepository = gateRepository;
+    }
 
     @PostMapping(value="/signup")
     public ResponseEntity<String> signup(@RequestBody UserSMA user) {
@@ -39,8 +44,12 @@ public class AuthgateController {
     }
     
     @GetMapping(value="/verifyemail")
-    public ResponseEntity<String> verifyEmail(@RequestParam (name="token") String token) {
-
+    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+        if (gateService.compareToken(token) == 0) {
+            gate
+            gateRepository.save()
+        }
+        return  response;
     }
 
 

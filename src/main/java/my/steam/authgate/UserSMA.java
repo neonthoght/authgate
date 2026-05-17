@@ -35,10 +35,8 @@ public class UserSMA{ // user of steam market analisys system
     boolean isActive;
 
     //используется для подтверждения email при регистрации (uuid). Испоьзовать для разных целей связанных с токеном
-    @Column(name = "token");
+    @Column(name = "token")
     String token;
-
-    public UserSMA() {}
 
     public UserSMA(String username, String password, String email, String token) {
         this.username = username;
