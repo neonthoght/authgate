@@ -12,4 +12,5 @@ public interface AuthgateRepository extends CrudRepository<UserSMA, String>{
 
     Optional<UserSMA> findByUsername(String username);
     Optional<UserSMA> findByEmail(String email);
+    Optional<UserSMA> findByToken(String token);
 }

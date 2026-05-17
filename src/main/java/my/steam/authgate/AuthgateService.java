@@ -15,9 +15,11 @@ import java.util.UUID;
 public class AuthgateService {
     public String username; 
     public String password; 
+    public String token;
     public int result = 0; // результат выполнения метода 
     AuthgateRepository userRepository; 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    MailSender mailSender;
 
     
     public AuthgateService (AuthgateRepository userRepository) {
@@ -55,16 +57,30 @@ public class AuthgateService {
             //шифруем пароль
             password = passwordEncoder.encode(password);
 
-            // отправляем письмо для подтверждения email
+            
 
-            UserSMA user = new UserSMA(username, password, email);
-
+            // сохраняем пользователя в БД и отправляем письмо для подтверждения email
+            token = UUID.randomUUID().toString();
+            UserSMA user = new UserSMA(username, password, email, token);
             userRepository.save(user);
 
-
+            sendVerificationEmail(email, token);
             result = 0;
 
         }
+        return result;
+    }
+
+    // Токен совпадает с тем, что лежит в auth.users(token) - 0 
+    // Токен не совпадает - 1
+    public int compareToken(String token) {
+
+        if (token.equals(userRepository.findByToken(token).get().token)) {
+
+            result = 0;
+        }
+        else result = 1;
+
         return result;
     }
 

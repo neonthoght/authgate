@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import my.steam.authgate.UserSMA;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.ResponseEntity;
+import rg.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -26,7 +27,7 @@ public class AuthgateController {
     @PostMapping(value="/signup")
     public ResponseEntity<String> signup(@RequestBody UserSMA user) {
         System.out.println(user.username + user.password);
-        result = gateService.signup(user.username, user.password);
+        result = gateService.signup(user.username, user.password, user.email);
         if (result == 0) {
             response = ResponseEntity.status(200).body("user created!");
         } else {
@@ -35,6 +36,11 @@ public class AuthgateController {
         }
 
         return response;
+    }
+    
+    @GetMapping(value="/verifyemail")
+    public ResponseEntity<String> verifyEmail(@RequestParam (name="token") String token) {
+
     }
 
 

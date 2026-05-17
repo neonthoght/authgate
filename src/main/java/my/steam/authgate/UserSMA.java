@@ -40,10 +40,11 @@ public class UserSMA{ // user of steam market analisys system
 
     public UserSMA() {}
 
-    public UserSMA(String username, String password, String email) {
+    public UserSMA(String username, String password, String email, String token) {
         this.username = username;
         this.password = password;
         this.email = email;
+        token = this.token;
     }
 
     String getId() {
