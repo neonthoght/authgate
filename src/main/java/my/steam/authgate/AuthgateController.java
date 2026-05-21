@@ -48,7 +48,7 @@ public class AuthgateController {
         return response;
     }
     
-    @GetMapping(value="/verifyemail")
+    @GetMapping(value="/verify")
     public ResponseEntity<String> verifyEmail(@RequestParam UUID token) {
         gateService.verifyEmail(token);
         return  response;

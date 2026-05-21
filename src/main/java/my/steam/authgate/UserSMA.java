@@ -46,7 +46,7 @@ public class UserSMA{ // user of steam market analisys system
         this.username = username;
         this.password = password;
         this.email = email;
-        token = this.token;
+        this.token = token;
     }
 
     String getId() {

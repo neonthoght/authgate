@@ -25,12 +25,12 @@ public class AuthgateService {
     public PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
-    public MailSender mailSender; //= new JavaMailSenderImpl();
+    public JavaMailSenderImpl mailSender; //= new JavaMailSenderImpl();
 
 
 
     
-    public AuthgateService (AuthgateRepository userRepository, MailSender mailSender) {
+    public AuthgateService (AuthgateRepository userRepository, JavaMailSenderImpl mailSender) {
         this.userRepository = userRepository;
         this.mailSender = mailSender;
     } 
@@ -46,7 +46,11 @@ public class AuthgateService {
         message.setSubject("Подтверждение регистрации");
         message.setText("Перейдите по ссылке для подтверждения аккаунта: " + confirmationUrl);
         
+        System.out.println("smtp user " + mailSender.getUsername());
+        System.out.println("smtp password " + mailSender.getPassword());
+        System.out.println("smtp port " + mailSender.getPort());     
         mailSender.send(message);
+
     }
 
     // пользователь перешёл по ссылке - подтверждает почту при регистрации. 
