@@ -12,6 +12,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.UUID;
+import jakarta.servlet.http.HttpSession;
 
 
 @RestController
@@ -31,9 +32,9 @@ public class AuthgateController {
     }
 
     @PostMapping(value="/signup")
-    public ResponseEntity<String> signup(@RequestBody UserSMA user) throws Exception {
+    public ResponseEntity<String> signup(@RequestBody UserSMA user, HttpSession session) throws Exception {
         System.out.println(user.username + user.password);
-        result = gateService.signup(user.username, user.password, user.email);
+        result = gateService.signup(user.username, user.password, user.email, session);
         if (result == 0) {
             response = ResponseEntity.status(200).body("user created!");
         } 
@@ -52,6 +53,13 @@ public class AuthgateController {
     public ResponseEntity<String> verifyEmail(@RequestParam UUID token) {
         gateService.verifyEmail(token);
         return  response;
+    }
+
+    @PostMapping(value="/login")
+    public ResponseEntity<String> login(@RequestBody UserSMA user, HttpSession session) throws Exception {
+
+        result = gateService.login(user.username, user.password, session);
+        return response;
     }
 
 

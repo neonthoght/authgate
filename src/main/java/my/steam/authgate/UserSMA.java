@@ -42,9 +42,14 @@ public class UserSMA{ // user of steam market analisys system
     //default constructor. Не удалять!
     UserSMA() {}
 
+    public UserSMA(String username, String password) {
+        this.username = username;
+        this.password = password; // шифрованный пароль
+    }
+
     public UserSMA(String username, String password, String email, UUID token) {
         this.username = username;
-        this.password = password;
+        this.password = password; // шифрованный пароль
         this.email = email;
         this.token = token;
     }

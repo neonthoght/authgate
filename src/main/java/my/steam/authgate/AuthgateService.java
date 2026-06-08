@@ -2,6 +2,9 @@ package my.steam.authgate;
 import my.steam.authgate.UserSMA;
 import my.steam.authgate.AuthgateRepository;
 import org.springframework.stereotype.Service;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
@@ -35,6 +38,33 @@ public class AuthgateService {
         this.mailSender = mailSender;
     } 
 
+    //
+    // Вход в систему
+    public int login(String username, String password, HttpSession session) throws Exception {
+        
+        //шифруем пароль
+        password = passwordEncoder.encode(password);
+
+        user = new UserSMA(username, password);
+        
+        user = userRepository.findByUsername(username).get();
+        if (user == null ) { // Пользователь не найден!
+            result = 1;
+        } else {
+
+            if (user.password.equals(password)) {
+                result = 0;
+            }
+            else {
+                result = 2;
+            }
+        }
+        // Добавляем в сессию имя зарегистрированного пользователя
+        session.setAttribute("username", username);
+
+        
+        return result;
+    }
 
     // Отправить письмо для подтверждения email
     public void sendVerificationEmail(String recipientEmail, UUID token)throws MailAuthenticationException {
@@ -71,7 +101,7 @@ public class AuthgateService {
     // 0 - успешно создан, 
     // 1 - пользователь уже существует
     // 2 - email уже используется
-    public int signup(String username, String password, String email) throws Exception {
+    public int signup(String username, String password, String email, HttpSession session) throws Exception {
         
         if (userExists(username)) {
             result = 1;
@@ -80,7 +110,6 @@ public class AuthgateService {
             result = 2;
         }
         else {
- 
             //шифруем пароль
             password = passwordEncoder.encode(password);
 
@@ -92,6 +121,9 @@ public class AuthgateService {
             sendVerificationEmail(email, token);
             userRepository.save(user);
             result = 0;
+
+            // Добавляем в сессию имя зарегистрированного пользователя
+            session.setAttribute("username", username);
 
         }
         return result;
