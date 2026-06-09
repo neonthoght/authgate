@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 
-//@EnableJdbcHttpSession (tableName="auth.session") раскомментировать если работаю на линуксе, там есть эта таблица
-@EnableJdbcHttpSession
+@EnableJdbcHttpSession (tableName="auth.session") //раскомментировать если работаю на линуксе, там есть эта таблица
+//@EnableJdbcHttpSession
 @EnableSpringHttpSession
 @Configuration
 public class SessionConfig {

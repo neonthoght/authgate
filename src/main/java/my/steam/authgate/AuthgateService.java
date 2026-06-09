@@ -38,29 +38,37 @@ public class AuthgateService {
         this.mailSender = mailSender;
     } 
 
-    //
+    
     // Вход в систему
     public int login(String username, String password, HttpSession session) throws Exception {
         
         //шифруем пароль
-        password = passwordEncoder.encode(password);
+        //password = passwordEncoder.encode(password);
 
         user = new UserSMA(username, password);
         
         user = userRepository.findByUsername(username).get();
         if (user == null ) { // Пользователь не найден!
+            System.out.println("Пользователь не найден!");
             result = 1;
         } else {
+            if (user.isActive == false) {
+                result = 4;
+                System.out.println("Пользователь неактивен!");
+            } else {
 
-            if (user.password.equals(password)) {
-                result = 0;
-            }
-            else {
-                result = 2;
+                if (passwordEncoder.matches(password, user.password)) {
+                    result = 0;
+                    System.out.println("Пароль совпадает!");
+                } else { // пароль не совпадает
+                    result = 2;
+                    System.out.println("Пароль не совпадает!");
+                }
             }
         }
-        // Добавляем в сессию имя зарегистрированного пользователя
+        // Добавляем в сессию имя зарегистрированного пользователя и флаг активности
         session.setAttribute("username", username);
+        session.setAttribute("is_active", user.isActive);
 
         
         return result;
