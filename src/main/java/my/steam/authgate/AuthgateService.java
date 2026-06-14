@@ -40,7 +40,7 @@ public class AuthgateService {
 
     
     // Вход в систему
-    public int login(String username, String password, HttpSession session) throws Exception {
+    public int signin(String username, String password, HttpSession session) throws Exception {
         
         //шифруем пароль
         //password = passwordEncoder.encode(password);

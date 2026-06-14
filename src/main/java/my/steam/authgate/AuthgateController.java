@@ -55,12 +55,11 @@ public class AuthgateController {
         return  response;
     }
 
-    @PostMapping(value="/login")
-    public ResponseEntity<String> login(@RequestBody UserSMA user, HttpSession session) throws Exception {
+    @PostMapping(value="/signin")
+    public ResponseEntity<String> signin(@RequestBody UserSMA user, HttpSession session) throws Exception {
 
-        result = gateService.login(user.username, user.password, session);
+        result = gateService.signin(user.username, user.password, session);
         return response;
     }
-
 
 }

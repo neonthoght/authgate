@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpage Title</title>
+    
+    <!-- Link to your external CSS stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div>
+        <input type="text" id="inp.req.username" placeholder="логин">
+        <input type="text" id="inp.req.password" placeholder="пароль">
+        <button id="btn.req.loginAndPassword" onclick="signin()">Ок</button>
+    </div>
+
+    <!-- Link to your external JavaScript file -->
+    <script>
+            async function signin() {
+                url = 'http://localhost:8081/auth/signin'
+                var usr = document.getElementById("inp.req.username").value;
+                var pas = document.getElementById("inp.req.password").value;
+                var payload = {username: usr, password: pas}
+
+                try {
+                    const response = await fetch (url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    } );
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`)
+                    }
+
+                    const data = await resonse.json();
+
+                    console.log('Success:', data);
+
+                } catch (error) {
+                    console.error ('Error', error);
+                }
+            }
+    </script>
+</body>
+</html>
