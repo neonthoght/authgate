@@ -11,4 +11,9 @@ public class PageController {
     public String singinPage(HttpSession session) {
         return "forward:/signin.html";
     }
+
+    @GetMapping(value="/")
+    public String redirectFromRoot(HttpSession session) {
+        return "redirect:/signin.html";
+    }
 }

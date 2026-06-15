@@ -37,7 +37,8 @@
                         throw new Error(`HTTP error! Status: ${response.status}`)
                     }
 
-                    const data = await resonse.json();
+                    //const data = await response.json();
+                    window.location.href = '/home.html';
 
                     console.log('Success:', data);
 
