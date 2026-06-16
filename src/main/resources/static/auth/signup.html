@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpage Title</title>
+    
+    <!-- Link to your external CSS stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="http://localhost:8081/auth/home" class="button">Вход в личный кабинет</a>
+
+    <div>
+        <input type="text" id="inp.req.username" placeholder="логин">
+        <input type="text" id="inp.req.password" placeholder="пароль">
+        <input type="text" id="inp.req.email" placeholder="email">
+        <button id="btn.req.loginAndPassword" onclick="signup()">Зарегистрироваться</button>
+        <p id="p.signin.sessionid"></p>
+    </div>
+
+    <!-- Link to your external JavaScript file -->
+    <script>
+            document.getElementById("p.signin.sessionid").value = getCookieValue("JSESSIONID");
+            
+            async function signup() {
+                url = 'http://localhost:8081/auth/signup'
+                var usr = document.getElementById("inp.req.username").value;
+                var pas = document.getElementById("inp.req.password").value;
+                var mail = document.getElementById("inp.req.email").value;
+                var payload = {username: usr, password: pas, email: mail}
+
+                try {
+                    const response = await fetch (url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    } );
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`)
+                    }
+
+                    //const data = await response.json();
+                    window.location.href = './home.html';
+
+                    console.log('Success:', data);
+
+                } catch (error) {
+                    console.error ('Error', error);
+                }
+            }
+    </script>
+</body>
+</html>

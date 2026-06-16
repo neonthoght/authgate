@@ -1,10 +1,13 @@
 package my.steam.authgate;
 import my.steam.authgate.UserSMA;
 import my.steam.authgate.AuthgateRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
-
+import org.springframework.session.Session;
+import org.springframework.session.MapSession;
+import org.springframework.session.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
@@ -23,8 +26,10 @@ public class AuthgateService {
     public String password; 
     public UUID token;
     public int result = 0; // результат выполнения метода 
-    public AuthgateRepository userRepository; 
+    public AuthgateRepository userRepository;
     public UserSMA user;
+    public Session session;
+    public String sessionParams;
     public PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
@@ -36,9 +41,17 @@ public class AuthgateService {
     public AuthgateService (AuthgateRepository userRepository, JavaMailSenderImpl mailSender) {
         this.userRepository = userRepository;
         this.mailSender = mailSender;
-    } 
+    }
+    
+    
 
     
+    //получить атрибуты сессии, атрибуты сессии берем по jsessionid из headers
+    public String getSessionParams(HttpSession session) {
+        System.out.println("sessionid: " + session.getId());
+        return  session.getId();
+    }
+
     // Вход в систему
     public int signin(String username, String password, HttpSession session) throws Exception {
         

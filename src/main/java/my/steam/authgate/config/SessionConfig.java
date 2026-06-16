@@ -13,14 +13,14 @@ import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHtt
 @Configuration
 public class SessionConfig {
 
-
 	@Bean
 	public CookieSerializer cookieSerializer() {
 		DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-		serializer.setCookieName("JSESSIONID"); 
+		serializer.setCookieName("sid"); 
 		serializer.setCookiePath("/auth"); 
 		serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$"); 
 		return serializer;
 	}
+	
 }
 

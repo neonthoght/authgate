@@ -9,11 +9,16 @@ public class PageController {
 
     @GetMapping(value="/auth/signin")
     public String singinPage(HttpSession session) {
-        return "forward:/signin.html";
+        return "forward:/auth/signin.html";
+    }
+
+    @GetMapping(value="/auth/home")
+    public String homePage(HttpSession session) {
+        return "forward:/auth/home.html";
     }
 
     @GetMapping(value="/")
     public String redirectFromRoot(HttpSession session) {
-        return "redirect:/signin.html";
+        return "redirect:/auth/signin.html";
     }
 }

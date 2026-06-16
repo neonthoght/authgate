@@ -31,6 +31,12 @@ public class AuthgateController {
         this.gateRepository = gateRepository;
     }
 
+    @GetMapping("/sessionparams")
+    public ResponseEntity<String> getSessionParams(HttpSession session) {
+        response = ResponseEntity.status(200).body(gateService.getSessionParams(session));
+        return response;
+    }
+
     @PostMapping(value="/signup")
     public ResponseEntity<String> signup(@RequestBody UserSMA user, HttpSession session) throws Exception {
         System.out.println(user.username + user.password);

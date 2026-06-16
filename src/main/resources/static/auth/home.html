@@ -13,4 +13,15 @@
     <p id="home.sessionid"></p>
     <p id="home.username"></p>
 </body>
+
+<script>
+    const getCookieValue = (name) => (
+    document.cookie
+    .split('; ')
+    .find(row => row.startsWith(`${name}=`))
+    ?.split('=')[1]
+);
+
+document.getElementById("home.sessionid").value = getCookieValue("JSESSIONID");
+</script>
 </html>
