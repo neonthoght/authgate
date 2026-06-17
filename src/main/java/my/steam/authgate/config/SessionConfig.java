@@ -17,7 +17,7 @@ public class SessionConfig {
 	public CookieSerializer cookieSerializer() {
 		DefaultCookieSerializer serializer = new DefaultCookieSerializer();
 		serializer.setCookieName("sid"); 
-		serializer.setCookiePath("/auth"); 
+		serializer.setCookiePath("/"); 
 		serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$"); 
 		return serializer;
 	}

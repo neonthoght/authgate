@@ -10,18 +10,14 @@
 </head>
 <body>
     <h1>home page!</h1>
-    <p id="home.sessionid"></p>
+    <p id="home.cookies"></p>
     <p id="home.username"></p>
 </body>
 
 <script>
-    const getCookieValue = (name) => (
-    document.cookie
-    .split('; ')
-    .find(row => row.startsWith(`${name}=`))
-    ?.split('=')[1]
-);
-
-document.getElementById("home.sessionid").value = getCookieValue("JSESSIONID");
+    document.getElementById("home.cookies").innerText = document.cookie;
+    document.cookie = "user=John"; // обновляем только куки с именем 'user'
+     document.cookie = "pas=123"; // обновляем только куки с именем 'user'
+    alert(document.cookie);
 </script>
 </html>

@@ -14,12 +14,21 @@
         <input type="text" id="inp.req.username" placeholder="логин">
         <input type="text" id="inp.req.password" placeholder="пароль">
         <button id="btn.req.loginAndPassword" onclick="signin()">Ок</button>
-        <p id="p.signin.sessionid"></p>
+    
+        <button id="btn.req.loginAndPassword" onclick="changeText()">Получить session_id</button>
+        <p id="p.signin.sessionid">ntr</p>
     </div>
 
     <!-- Link to your external JavaScript file -->
     <script>
-            document.getElementById("p.signin.sessionid").value = getCookieValue("JSESSIONID");
+        function changeText() {
+            // 1. Find the element by its ID
+            //const pTag = document.getElementById("p.signin.sessionid").innerText = "The text has been updated!";
+            document.getElementById("p.signin.sessionid").innerText = document.cookie;
+            // 2. Set the new value
+            //pTag.innerText = "The text has been updated!";
+            alert(document.cookie);
+        }
             
             async function signin() {
                 url = 'http://localhost:8081/auth/signin'
