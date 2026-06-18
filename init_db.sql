@@ -39,3 +39,27 @@ alter table auth.users alter column id set default nextval('auth.users_id_seq');
  );
 
  CREATE INDEX AUTH_SESSION_ATTRIBUTES_IX1 ON AUTH.SESSION_ATTRIBUTES (SESSION_PRIMARY_ID);
+
+
+create sequence auth.roles_id_seq;
+CREATE TABLE auth.roles (
+    id varchar(50) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE -- Example: 'ROLE_ADMIN', 'ROLE_USER'
+);
+
+ALTER TABLE auth.users ALTER COLUMN id SET DEFAULT nextval('auth.users_id_seq');
+
+ALTER TABLE auth.roles ALTER COLUMN id SET DEFAULT nextval('auth.roles_id_seq');
+
+ALTER TABLE auth.users ADD CONSTRAINT unique_usr_id UNIQUE (id);
+
+alter table auth.roles add constraint unique_role_id unique (id);
+
+CREATE TABLE auth.user_roles (
+    user_id varchar(50) NOT NULL,
+    role_id varchar(50) NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES auth.users(id),
+    FOREIGN KEY (role_id) REFERENCES auth.roles(id)
+);
+
